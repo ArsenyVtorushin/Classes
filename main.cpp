@@ -7,6 +7,19 @@ class Worker
 {
 public:
 
+	void Start()
+	{
+		int choice;
+		FillWorker();
+		std::cout << "\n1 - Показать\n2 - Выход\n";
+		std::cin >> choice;
+		
+		if (choice == 1)
+		{
+			Print();
+		}
+	}
+
 	void FillWorker()
 	{
 		std::cout << "Имя и фамилия: ";
@@ -24,11 +37,9 @@ public:
 
 	void Print()
 	{
-		FillWorker();
-
 		std::cout << "\n******************************************************";
 
-		std::cout << std::left << std::setw(45) << "\n* Имя и фамилия: " << std::right << name 
+		std::cout << std::left << std::setw(45) << "\n* Имя и фамилия: "    << std::right << name 
 		 << std::left << std::setw(45) << "\n* Стаж (в годах): "            << std::right << experience 
 		 << std::left << std::setw(45) << "\n* Часовая зарплата: "          << std::right << wagesPerHour 
 		 << std::left << std::setw(45) << "\n* Кол-во отработанных часов: " << std::right << hoursInAll 
@@ -75,7 +86,7 @@ int main()
 	SetConsoleOutputCP(1251);
 
 	Worker First;
-	First.Print();
+	First.Start();
 
 	return 0;
 }
