@@ -7,13 +7,6 @@ class Worker
 {
 public:
 
-	std::string name;
-	float experience;
-	int wagesPerHour;
-	float hoursInAll;
-	int salary;
-	int award;
-
 	void FillWorker()
 	{
 		std::cout << "Имя и фамилия: ";
@@ -44,6 +37,15 @@ public:
 
 		std::cout << "\n******************************************************\n";
 	}
+
+private:
+
+	std::string name;
+	float experience;
+	int wagesPerHour;
+	float hoursInAll;
+	int salary;
+	int award;
 
 	void WagesInAll()
 	{
