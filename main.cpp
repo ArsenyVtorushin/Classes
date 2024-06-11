@@ -2,6 +2,7 @@
 #include <iomanip>
 #include <string>
 #include <Windows.h>
+#include <fstream>
 
 class Worker
 {
@@ -10,10 +11,11 @@ public:
 	void Start()
 	{
 		int choice;
+	
 		FillWorker();
 		std::cout << "\n1 - Показать\n2 - Выход\n";
 		std::cin >> choice;
-		
+
 		if (choice == 1)
 		{
 			Print();
@@ -47,6 +49,15 @@ public:
 		 <<	std::left << std::setw(45) << "\n* Премия: "                    << std::right << award;
 
 		std::cout << "\n******************************************************\n";
+	}
+
+	void OutputToFile()
+	{
+		file.open("file.txt", std::ofstream::app);
+
+		
+
+		file.close();
 	}
 
 private:
@@ -87,6 +98,12 @@ int main()
 
 	Worker First;
 	First.Start();
+
+	Worker Second;
+	Second.Start();
+
+	Worker Third;
+	Third.Start();
 
 	return 0;
 }
