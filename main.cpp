@@ -8,20 +8,6 @@ class Worker
 {
 public:
 
-	void Start()
-	{
-		int choice;
-	
-		FillWorker();
-		std::cout << "\n1 - Показать\n2 - Выход\n";
-		std::cin >> choice;
-
-		if (choice == 1)
-		{
-			Print();
-		}
-	}
-
 	void FillWorker()
 	{
 		std::cout << "Имя и фамилия: ";
@@ -39,25 +25,38 @@ public:
 
 	void Print()
 	{
-		std::cout << "\n******************************************************";
+		std::cout << "\n*****************************************************************";
 
-		std::cout << std::left << std::setw(45) << "\n* Имя и фамилия: "    << std::right << name 
-		 << std::left << std::setw(45) << "\n* Стаж (в годах): "            << std::right << experience 
-		 << std::left << std::setw(45) << "\n* Часовая зарплата: "          << std::right << wagesPerHour 
-		 << std::left << std::setw(45) << "\n* Кол-во отработанных часов: " << std::right << hoursInAll 
-		 << std::left << std::setw(45) << "\n* Итоговая зарплата: "         << std::right << salary 
-		 <<	std::left << std::setw(45) << "\n* Премия: "                    << std::right << award;
+		std::cout << std::left << std::setw(45) << "\n* Имя и фамилия: "    << std::setw(20) << std::right << name
+		 << std::left << std::setw(45) << "\n* Стаж (в годах): "            << std::setw(20) << std::right << experience
+		 << std::left << std::setw(45) << "\n* Часовая зарплата: "          << std::setw(20) << std::right << wagesPerHour
+		 << std::left << std::setw(45) << "\n* Кол-во отработанных часов: " << std::setw(20) << std::right << hoursInAll
+		 << std::left << std::setw(45) << "\n* Итоговая зарплата: "         << std::setw(20) << std::right << wagesInAll
+		 <<	std::left << std::setw(45) << "\n* Премия: "                    << std::setw(20) << std::right << award;
 
-		std::cout << "\n******************************************************\n";
+		std::cout << "\n*****************************************************************\n\n";
 	}
 
 	void OutputToFile()
 	{
-		file.open("file.txt", std::ofstream::app);
+		std::ofstream outputFile;
+		outputFile.open("file.txt", std::ofstream::app);
 
-		
+		if (!outputFile.is_open())
+		{
+			std::cerr << "\nError output\n";
+		}
+		else
+		{
+			outputFile << std::left << std::setw(45) << "\nИмя и фамилия: "      << std::setw(20) << std::right << name
+				<< std::left << std::setw(45) << "\nСтаж (в годах): "            << std::setw(20) << std::right << experience
+				<< std::left << std::setw(45) << "\nЧасовая зарплата: "          << std::setw(20) << std::right << wagesPerHour
+				<< std::left << std::setw(45) << "\nКол-во отработанных часов: " << std::setw(20) << std::right << hoursInAll
+				<< std::left << std::setw(45) << "\nИтоговая зарплата: "         << std::setw(20) << std::right << wagesInAll
+				<< std::left << std::setw(45) << "\nПремия: "                    << std::setw(20) << std::right << award << "\n";
+		}
 
-		file.close();
+		outputFile.close();
 	}
 
 private:
@@ -66,44 +65,114 @@ private:
 	float experience;
 	int wagesPerHour;
 	float hoursInAll;
-	int salary;
+	int wagesInAll;
 	int award;
 
 	void WagesInAll()
 	{
-		salary = wagesPerHour * hoursInAll;
+		wagesInAll = wagesPerHour * hoursInAll;
 	}
 
 	void Award()
 	{
 		if (experience > 1 && experience < 3)
 		{
-			award = salary / 100 * 5;
+			award = wagesInAll / 100 * 5;
 		}
 		else if (experience >= 3 && experience < 5)
 		{
-			award = salary / 100 * 8;
+			award = wagesInAll / 100 * 8;
 		}
 		else if (experience >= 5)
 		{
-			award = salary / 100 * 15;
+			award = wagesInAll / 100 * 15;
 		}
 	}
 };
+
+void Start(Worker& worker);
+void ReadFromFileAndPrint();
+void ClearFileBeforeStart();
 
 int main()
 {
 	SetConsoleCP(1251);
 	SetConsoleOutputCP(1251);
 
-	Worker First;
-	First.Start();
+	ClearFileBeforeStart();
 
-	Worker Second;
-	Second.Start();
+	Worker first;
+	Start(first);
 
-	Worker Third;
-	Third.Start();
+	Worker second;
+	Start(second);
+
+	Worker third;
+	Start(third);
+
+	ReadFromFileAndPrint();
 
 	return 0;
+}
+
+void Start(Worker& worker)
+{
+	worker.FillWorker();
+
+	char choice;
+	do
+	{
+		std::cout << "\n1 - Показать\n2 - Выход\n";
+		std::cin >> choice;
+	} while (choice < 49 || choice > 50);
+
+	if (choice == '1')
+	{
+		worker.Print();
+	}
+
+	worker.OutputToFile();
+	std::cin.ignore(3200, '\n');
+}
+
+void ReadFromFileAndPrint()
+{
+	std::cout << "\n\n - ИТОГ: -\n";
+
+	std::ifstream inputFile;
+	inputFile.open("file.txt");
+
+	if (!inputFile.is_open())
+	{
+		std::cerr << "\nError input\n";
+	}
+	else
+	{
+		char sym;
+		
+		while (inputFile.get(sym))
+		{
+			std::cout << sym;
+		}
+	}
+
+	inputFile.close();
+}
+
+void ClearFileBeforeStart()
+{
+	std::ofstream file;
+
+	file.open("file.txt");
+
+	if (!file.is_open())
+	{
+		std::cerr << "error";
+	}
+	else
+	{
+		file << "";
+	}
+
+	file.close();
 }
